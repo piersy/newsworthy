@@ -6,7 +6,7 @@ from tqdm import tqdm
 
 
 def get_article_classification(messages, secrets):
-        # Initialize OpenAI
+    # Initialize OpenAI
     openai.organization = secrets["ORG_ID"]
     openai.api_key = secrets["OPEN_AI_KEY"]
     response = openai.ChatCompletion.create(
@@ -21,6 +21,9 @@ def main():
     # Load articles
     storage_path = Path(__file__).parent / "storage"
     default_path = Path(__file__).parent / "default"
+    if not storage_path.exists():
+        print("Please load articles first.")
+        return None
     article_ids = [file.stem for file in storage_path.glob("*") if file.is_file()]
 
     # Load API key

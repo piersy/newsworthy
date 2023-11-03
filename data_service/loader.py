@@ -33,6 +33,9 @@ def main(URL):
 
     # Check if article exists in storage
     storage_path = Path(__file__).parent / "storage"
+    if not storage_path.exists():
+        storage_path.mkdir(parents=True, exist_ok=True)
+
     existing_article_ids = [
         file.stem for file in storage_path.glob("*") if file.is_file()
     ]
