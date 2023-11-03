@@ -20,25 +20,27 @@ contract NewsWorthy {
         bytes32 urlHash;
     }
 
-    // pageVersionData[] pageData;
-
-    /// Function to turn URL in a hash.
-    function add (string memory url, bytes32 hash) public {
+    // Function to turn URL in a hash.
+    function add(string memory url, bytes32 hash) public {
 
         bytes32 key = keccak256(abi.encode(url));
         bool foundMatch;
-         pageVersionData[] memory data = urlDataMap[key]; 
-         for (uint i = 0; i < data.length; i++) {
-            if (data[i].urlHash == hash) {
-                data[i].counter ++;
-                foundMatch = true;
-                break;
-            }
-         }
+        for (uint i = 0; i < urlDataMap[key].length; i++) {
+           if (urlDataMap[key][i].urlHash == hash) {
+               urlDataMap[key][i].counter ++;
+               foundMatch = true;
+               break;
+           }
+        }
         
         if (!foundMatch) {
              urlDataMap[key].push(pageVersionData({counter: 1, urlHash: hash}));
         }
 
+    }
+
+    // Function to turn URL in a hash.
+    function getRecord(string memory url) public view returns (pageVersionData[] memory) {
+        return  urlDataMap[keccak256(abi.encode(url))];
     }
 }
