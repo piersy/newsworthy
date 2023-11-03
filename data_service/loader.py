@@ -32,25 +32,28 @@ def main(URL):
     article.parse()
 
     # Check if article exists in storage
-    storage_path = Path(__file__).parent / "article_storage"
-    existing_article_ids = [file.stem for file in storage_path.glob("*") if file.is_file()]
+    storage_path = Path(__file__).parent / "storage"
+    existing_article_ids = [
+        file.stem for file in storage_path.glob("*") if file.is_file()
+    ]
     file_path = storage_path / (_id + ".json")
 
     # Update versions
     if _id in existing_article_ids:
         with open(file_path, "r") as f:
             article_versions = json.load(f)
-        prev_version = sorted(list(article_versions.keys()))[-1]
-        prev_text = article_versions[prev_version]["article_text"]
+        prev_version = sorted(list(article_versions["versions"].keys()))[-1]
+        prev_text = article_versions["versions"][prev_version]["article_text"]
         if articles_different(prev_text, article.text):
-            version = prev_version + 1
-            article_versions[version] = create_new_version(article)
+            version = int(prev_version) + 1
+            article_versions["versions"][str(version)] = create_new_version(article)
         else:
-            print("Version up-to-date.")
+            print("Already up-to-date.")
     else:
         article_versions = {}
         version = 0
-        article_versions[version] = create_new_version(article)
+        article_versions["url"] = URL
+        article_versions["versions"] = {version: create_new_version(article)}
 
     # Store updated versions
     with open(file_path, "w") as f:
