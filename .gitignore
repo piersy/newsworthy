@@ -1,3 +1,4 @@
 *.ipynb
 *.json
 *venv*
+*secret*
