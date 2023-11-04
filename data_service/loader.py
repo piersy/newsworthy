@@ -4,6 +4,14 @@ import uuid
 from pathlib import Path
 
 from newspaper import Article
+import hashlib
+
+
+def create_hash(text):
+    sha256_hash = hashlib.sha256()
+    sha256_hash.update(text.encode('utf-8'))
+    hashed_text = sha256_hash.hexdigest()
+    return hashed_text
 
 
 def create_new_version(article):
@@ -12,6 +20,7 @@ def create_new_version(article):
         "title": article.title,
         "publish_date": article.publish_date.strftime("%Y-%m-%dT%H:%M:%S"),
         "article_text": article.text,
+        "hash": str(create_hash(article.text))
     }
 
 

@@ -39,6 +39,7 @@ gulp.task('build', function (done) {
         ignore: [
             "/node_modules/wagmi/dist",
             "/node_modules/@wagmi/core/dist",
+            "/node_modules/@multiformats/multiaddr",
         ]
       })
     .bundle()

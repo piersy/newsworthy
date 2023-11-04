@@ -38,8 +38,6 @@ def main():
     with open(default_path / "tags.txt", "r") as f:
         tags = [line.strip() for line in f]
 
-    update_counter = 0
-
     for _id in tqdm(article_ids, ncols=60):
         with open(storage_path / (_id + ".json"), "r") as f:
             article_versions = json.load(f)
@@ -63,7 +61,6 @@ def main():
             article_versions.update(article_classifications)
             with open(storage_path / (_id + ".json"), "w") as f:
                 json.dump(article_versions, f)
-            update_counter += 1
 
 
 if __name__ == "__main__":

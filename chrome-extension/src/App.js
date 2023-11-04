@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
-import { useAccount, useConnect, useDisconnect, useContractWrite, useContractRead } from 'wagmi'
+import { useAccount, useContractWrite, useContractRead } from 'wagmi'
 import { useWeb3Modal } from '../node_modules/@web3modal/wagmi/dist/esm/exports/react.js'
-// import { useWeb3Modal } from '@web3modal/wagmi/react'
+import { IExecDataProtector } from '@iexec/dataprotector';
+// import { useWeb3Modal } from '@web3modal/wagmi/react';
 
 import { abi } from './utils/abi.js';
 
 // import { useWallet } from './context/WalletProvider';
-
 const contractAddress = '0xFF5916AAB47613988841c3d2FF137e40DaE3590d';
+
 function App() {
+  const web3Provider = window.ethereum;
+  // instantiate
+  const dataProtector = new IExecDataProtector(web3Provider);
 
   const { open } = useWeb3Modal()
   // const { isAuthenticated, connectWallet, disconnectWallet, account } = useWallet();
@@ -31,7 +35,6 @@ function App() {
     functionName: 'getRecord',
     args: ['https://lemonde.fr'],
   });
-
 
 
   console.log({ address, isConnecting, isConnected, writeData, isWriting, isWriteSuccess, readData });
