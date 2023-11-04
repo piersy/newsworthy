@@ -8,6 +8,8 @@
     "start": "node sendEmail.js"
   },
   "dependencies": {
-    "ethers": "^5.7.2"
+    "@iexec/web3mail": "^0.5.2",
+    "ethers": "^5.7.2",
+    "iexec": "^8.4.0"
   }
 }

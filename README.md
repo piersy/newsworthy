@@ -43,3 +43,14 @@ Returns:
 'neutrality': 0.9
 }
 ```
+
+## Mail Service (JavaScript)
+
+````bash
+cd mail_service
+
+nmp install
+
+npm install @iexec/web3mail
+
+npm start

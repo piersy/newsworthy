@@ -18,11 +18,10 @@ def make_email_content(data):
 
 def send_analysis_mail(address, data):
     input_data = {
+        "addresses": [address],
         "emailSubject": "Analysis of your requested article is here!",
         "emailContent": make_email_content(data),
-        "addresses": [address],
-        "platformName": "GitNews"
     }
-    script_path = "../mail_service/scripts/sendMailToAddresses.js"
+    script_path = "../mail_service/app/sendEmail.js"
     command = ["node", script_path, json.dumps(input_data)]
-    return subprocess.run(command, capture_output=True, text=True)
+    return subprocess.run(command)  # , capture_output=True, text=True)
