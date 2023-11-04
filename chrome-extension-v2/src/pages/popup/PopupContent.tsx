@@ -2,17 +2,18 @@ import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { useWeb3Modal } from '@web3modal/wagmi/react'
 import { useAccount, useContractWrite, useContractRead, useBalance } from 'wagmi'
+
 // import { IExecDataProtector } from '@iexec/dataprotector';
+
 
 import withSuspense from '@src/shared/hoc/withSuspense';
 import withErrorBoundary from '@src/shared/hoc/withErrorBoundary';
 
-import { abi, polygonAbi } from '@src/shared/abi';
+import { polygonAbi } from '@src/shared/abi';
 import { postArticle, getArchive } from "@src/shared/api";
 import '@src/index.css';
 
-// const contractAddress = '0xFF5916AAB47613988841c3d2FF137e40DaE3590d';
-const contractAddress = '0xcad8374fba8d1e988c00f1fc79eb711ae2bbe452';
+const contractAddress = '0x8f7b2c515aba3f8109e690c37be27f8b1e917bcd';
 const decimals = 1000000000000000000;
 const Popup = () => {
     const [currentUrl, setCurrentUrl] = useState('');
@@ -60,10 +61,16 @@ const Popup = () => {
 
   const { data: readData, refetch } = useContractRead({
     address: contractAddress,
-    abi: abi,
+    abi: polygonAbi,
     functionName: 'getRecord',
     args: [currentUrl],
   });
+
+    const { data: contribData, refetch: refetchContrib } = useContractRead({
+        address: contractAddress,
+        abi: polygonAbi,
+        functionName: 'seeContributions',
+    });
 
     const { data: balanceData, refetch: refetchBalance } = useBalance({
         address: address,
@@ -74,8 +81,11 @@ const Popup = () => {
         setTimeout(() => {
             refetch();
             refetchBalance();
+            refetchContrib()
         }, 3000)
     }, [isWriteSuccess]);
+
+    console.log({ contribData });
 
     const matchArticle = (article: { [key: string]: Record<string, unknown> }, hash: string) => {
         console.log({ article, hash });
@@ -156,7 +166,7 @@ const Popup = () => {
                                         {Number(balanceData.value) / decimals + ' ' + balanceData.symbol}
                                     </div>
                                     <div className="stat-title">Rewards for Contributions</div>
-                                    <div className="stat-desc text-secondary">151 contributions</div>
+                                    <div className="stat-desc text-secondary">{Number(contribData || 0)} contributions</div>
                                 </div>
                                 <div className="stat">
                                     <label className="label">

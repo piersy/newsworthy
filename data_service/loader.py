@@ -16,9 +16,13 @@ def create_hash(text):
 
 def create_new_version(article):
     print("New version stored.")
+    if article.publish_date is not None:
+        date = article.publish_date.strftime("%Y-%m-%dT%H:%M:%S")
+    else:
+        date = article.publish_date
     return {
         "title": article.title,
-        "publish_date": article.publish_date.strftime("%Y-%m-%dT%H:%M:%S"),
+        "publish_date": date,
         "article_text": article.text,
         "hash": str(create_hash(article.text))
     }
