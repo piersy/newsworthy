@@ -18,7 +18,7 @@ def make_email_content(data):
 
 def send_analysis_mail(address, data):
     input_data = {
-        "addresses": [address],
+        "addresses": address,
         "emailSubject": "Analysis of your requested article is here!",
         "emailContent": make_email_content(data),
     }
