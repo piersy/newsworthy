@@ -1,22 +1,27 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
-import { useAccount, useContractWrite, useContractRead } from 'wagmi'
-import { useWeb3Modal } from '../node_modules/@web3modal/wagmi/dist/esm/exports/react.js'
-import { IExecDataProtector } from '@iexec/dataprotector';
-// import { useWeb3Modal } from '@web3modal/wagmi/react';
+import { useAccount, useContractWrite, useContractRead, usePublicClient } from 'wagmi'
+import { useWeb3Modal } from '@web3modal/wagmi/react'
+// import { IExecDataProtector } from '@iexec/dataprotector';
 
-import { abi } from './utils/abi.js';
+import withSuspense from '@src/shared/hoc/withSuspense';
+import withErrorBoundary from '@src/shared/hoc/withErrorBoundary';
 
-// import { useWallet } from './context/WalletProvider';
+import { abi } from '@src/shared/abi';
+import '@src/index.css';
+
 const contractAddress = '0xFF5916AAB47613988841c3d2FF137e40DaE3590d';
 
-function App() {
-  const web3Provider = window.ethereum;
+const Popup = () => {
+  // const theme = useStorage(exampleThemeStorage);
+
+
+  // const web3Provider = usePublicClient();
+  // const web3Provider = window.ethereum;
   // instantiate
-  const dataProtector = new IExecDataProtector(web3Provider);
+  // const dataProtector = new IExecDataProtector(web3Provider);
 
   const { open } = useWeb3Modal()
-  // const { isAuthenticated, connectWallet, disconnectWallet, account } = useWallet();
   const [tab, setTab] = useState(0);
 
   // const { connect, connectors, isLoading, pendingConnector } = useConnect()
@@ -29,7 +34,7 @@ function App() {
     functionName: 'add',
   });
 
-  const { data: readData, refetch } = useContractRead({
+  const { data: readData } = useContractRead({
     address: contractAddress,
     abi: abi,
     functionName: 'getRecord',
@@ -40,44 +45,17 @@ function App() {
   console.log({ address, isConnecting, isConnected, writeData, isWriting, isWriteSuccess, readData });
 
   return (
-    <div className="w-[400px] h-[600px] bg-base-200/50 p-3 text-center">
+    <div>
+      <div className="w-[450px] h-[650px] bg-base-200/50 p-3 text-center">
       <header className="flex flex-col align-middle justify-evenly prose">
         <h1 className="mb-2 prose-lg">Git News</h1>
         <button className="btn btn-sm mb-2" onClick={() => open()}>Open Connect Modal</button>
-        {/*{connectors.map((connector) => (*/}
-        {/*    <button*/}
-        {/*        className="btn btn-sm"*/}
-        {/*        // disabled={!connector.ready}*/}
-        {/*        key={connector.id}*/}
-        {/*        onClick={() => {*/}
-        {/*          if (isConnected) {*/}
-        {/*            disconnect()*/}
-        {/*          } else {*/}
-        {/*            connect({connector})*/}
-        {/*          }*/}
-        {/*        }*/}
-        {/*      }*/}
-        {/*    >*/}
-        {/*      {connector.name} {isConnected ? ' (disconnect)' : '(connect)'}*/}
-        {/*      {isLoading &&*/}
-        {/*          pendingConnector?.id === connector.id &&*/}
-        {/*          ' (connecting)'}*/}
-        {/*    </button>*/}
-        {/*))}*/}
-        {/*<button*/}
-        {/*    className="btn btn-sm mb-4"*/}
-        {/*    onClick={isAuthenticated ? disconnectWallet : connectWallet}*/}
-        {/*    id="wallet-connect"*/}
-        {/*>*/}
-        {/*    {isAuthenticated ? "Disconnect Wallet" : "Connect Wallet"}*/}
-        {/*</button>*/}
         <button
             className="btn btn-primary"
             onClick={() => {
               write({
                 args: ['https://lemonde.fr', '0x0f186bb32930ee6759eda47aff152d9be149067d42fc3b48677c77548aedb392'],
                 from: address,
-                // value: parseEther('0.01'),
               })
             }}
         >
@@ -93,11 +71,6 @@ function App() {
         {isConnected
             ? (
                 <section className="flex flex-col align-middle mt-2 justify-between h-[calc(100%-180px)] items-center">
-                    {/*<div className="prose">*/}
-                    {/*    <h3 className="prose-base">*/}
-                    {/*        {tab === 0 ? 'Article History' : 'Rewards'}*/}
-                    {/*    </h3>*/}
-                    {/*</div>*/}
                     <div className="h-full w-full round flex flex-col overflow-auto mb-2 rounded-md pt-4 pr-4">
                         {tab === 0 ?
                             (<div>
@@ -170,7 +143,8 @@ function App() {
             : null
         }
     </div>
+    </div>
   );
-}
+};
 
-export default App;
+export default withErrorBoundary(withSuspense(Popup, <div> Loading ... </div>), <div> Error... </div>);
