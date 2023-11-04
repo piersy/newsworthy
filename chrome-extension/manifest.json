@@ -1,0 +1,34 @@
+{
+    "name": "GitNews Extension",
+    "description" : "An extension anti news censorship",
+    "version": "1.0",
+    "manifest_version": 3,
+    "action": {
+      "default_popup": "index.html",
+      "default_title": "Fight News Censorship"
+    },
+    "icons": {
+      "16": "logo192.png",
+      "48": "logo192.png",
+      "128": "logo192.png"
+    },
+    "//background": {
+      "service_worker": "./static/js/background.js"
+    },
+    "//content_scripts": [
+      {
+        "matches": ["*://www.youtube.com/*"],
+        "js": ["./static/js/content.js"]
+      }
+    ],
+    "permissions": [
+      "activeTab",
+      "tabs",
+      "webNavigation",
+      "storage",
+      "browsingData",
+      "contextMenus",
+      "browser"
+    ],
+    "optional_permissions": []
+  }
