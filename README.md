@@ -23,7 +23,7 @@ uvicorn api:app --reload
 
 ### API request
 
-get("http://127.0.0.1:8000/articles/", headers={"url": news_url})
+get("http://127.0.0.1:8000/articles/", headers={"url": 'https://www.theguardian.com/world/2023/nov/04/some_article'})
 
 Returns:
 
