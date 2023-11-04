@@ -10,11 +10,12 @@ import withSuspense from '@src/shared/hoc/withSuspense';
 import withErrorBoundary from '@src/shared/hoc/withErrorBoundary';
 
 import { polygonAbi } from '@src/shared/abi';
-import { postArticle, getArchive } from "@src/shared/api";
 import emailStorage from '@src/shared/storages/emailStorage';
+import { postArticle, getArchive } from "@src/shared/api";
+
 import '@src/index.css';
 
-const contractAddress = '0x8f7b2c515aba3f8109e690c37be27f8b1e917bcd';
+const contractAddress = '0x984f40cFf393B070eA5260B72afdd3175fE091bC';
 const decimals = 1000000000000000000;
 const Popup = () => {
     const [currentUrl, setCurrentUrl] = useState('');
