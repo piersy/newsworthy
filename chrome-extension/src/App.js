@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
-import { useAccount, useConnect, useDisconnect } from 'wagmi'
+import { useAccount, useConnect, useDisconnect, useContractWrite } from 'wagmi'
 import { useWeb3Modal } from '../node_modules/@web3modal/wagmi/dist/esm/exports/react.js'
 // import { useWeb3Modal } from '@web3modal/wagmi/react'
 
+import { abi } from './utils/abi.js';
+
 // import { useWallet } from './context/WalletProvider';
 
+const contractAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
 function App() {
 
   const { open } = useWeb3Modal()
@@ -16,7 +19,14 @@ function App() {
   // const { disconnect } = useDisconnect()
   const { address, isConnecting, isConnected } = useAccount()
 
+  const { data, isLoading, isSuccess, write } = useContractWrite({
+    address: contractAddress,
+    abi: abi,
+    functionName: 'add',
+  })
+
   console.log({ address, isConnecting, isConnected });
+
 
   return (
     <div className="w-[400px] h-[600px] bg-base-200/50 p-3 text-center">
@@ -50,7 +60,16 @@ function App() {
         {/*>*/}
         {/*    {isAuthenticated ? "Disconnect Wallet" : "Connect Wallet"}*/}
         {/*</button>*/}
-        <button className="btn btn-primary">
+        <button
+            className="btn btn-primary"
+            onClick={() => {
+              write({
+                args: ['https://lemonde.fr', '0x0f186bb32930ee6759eda47aff152d9be149067d42fc3b48677c77548aedb392'],
+                from: address,
+                // value: parseEther('0.01'),
+              })
+            }}
+        >
           Contribute Now!
           {/*<div className="badge badge-oprimary">+152</div>*/}
         </button>

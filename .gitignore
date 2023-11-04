@@ -1,4 +1,7 @@
 *.ipynb
-*.json
+data_service/*.json
 *venv*
 *secret*
+.DS_Store
+node_modules/
+
