@@ -7,6 +7,7 @@ import { useWeb3Modal } from '../node_modules/@web3modal/wagmi/dist/esm/exports/
 // import { useWallet } from './context/WalletProvider';
 
 function App() {
+
   const { open } = useWeb3Modal()
   // const { isAuthenticated, connectWallet, disconnectWallet, account } = useWallet();
   const [tab, setTab] = useState(0);

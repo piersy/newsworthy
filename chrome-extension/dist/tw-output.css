@@ -1875,36 +1875,6 @@ html {
   margin-bottom: 0;
 }
 
-.alert {
-  display: grid;
-  width: 100%;
-  grid-auto-flow: row;
-  align-content: flex-start;
-  align-items: center;
-  justify-items: center;
-  gap: 1rem;
-  text-align: center;
-  border-width: 1px;
-  --tw-border-opacity: 1;
-  border-color: hsl(var(--b2) / var(--tw-border-opacity));
-  padding: 1rem;
-  --tw-text-opacity: 1;
-  color: hsl(var(--bc) / var(--tw-text-opacity));
-  border-radius: var(--rounded-box, 1rem);
-  --alert-bg: hsl(var(--b2));
-  --alert-bg-mix: hsl(var(--b1));
-  background-color: var(--alert-bg);
-}
-
-@media (min-width: 640px) {
-  .alert {
-    grid-auto-flow: column;
-    grid-template-columns: auto minmax(auto,1fr);
-    justify-items: start;
-    text-align: left;
-  }
-}
-
 .avatar.placeholder > div {
   display: flex;
   align-items: center;
@@ -2476,14 +2446,6 @@ html {
   color: var(--tab-color);
   padding-left: var(--tab-padding, 1rem);
   padding-right: var(--tab-padding, 1rem);
-}
-
-.alert-success {
-  border-color: hsl(var(--su) / 0.2);
-  --tw-text-opacity: 1;
-  color: hsl(var(--suc) / var(--tw-text-opacity));
-  --alert-bg: hsl(var(--su));
-  --alert-bg-mix: hsl(var(--b1));
 }
 
 .badge-accent {
@@ -3602,32 +3564,16 @@ html {
   display: flex;
 }
 
-.h-\[500px\] {
-  height: 500px;
-}
-
-.h-\[calc\(100\%-150px\)\] {
-  height: calc(100% - 150px);
-}
-
-.h-full {
-  height: 100%;
-}
-
 .h-\[600px\] {
   height: 600px;
 }
 
-.h-\[700px\] {
-  height: 700px;
-}
-
-.h-\[calc\(100\%-200px\)\] {
-  height: calc(100% - 200px);
-}
-
 .h-\[calc\(100\%-180px\)\] {
   height: calc(100% - 180px);
+}
+
+.h-full {
+  height: 100%;
 }
 
 .w-\[400px\] {
