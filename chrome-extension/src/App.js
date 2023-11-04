@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
-import { useAccount, useConnect, useDisconnect, useContractWrite } from 'wagmi'
+import { useAccount, useConnect, useDisconnect, useContractWrite, useContractRead } from 'wagmi'
 import { useWeb3Modal } from '../node_modules/@web3modal/wagmi/dist/esm/exports/react.js'
 // import { useWeb3Modal } from '@web3modal/wagmi/react'
 
@@ -8,7 +8,7 @@ import { abi } from './utils/abi.js';
 
 // import { useWallet } from './context/WalletProvider';
 
-const contractAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
+const contractAddress = '0xFF5916AAB47613988841c3d2FF137e40DaE3590d';
 function App() {
 
   const { open } = useWeb3Modal()
@@ -19,14 +19,22 @@ function App() {
   // const { disconnect } = useDisconnect()
   const { address, isConnecting, isConnected } = useAccount()
 
-  const { data, isLoading, isSuccess, write } = useContractWrite({
+  const { data: writeData, isLoading: isWriting, isSuccess: isWriteSuccess, write } = useContractWrite({
     address: contractAddress,
     abi: abi,
     functionName: 'add',
-  })
+  });
 
-  console.log({ address, isConnecting, isConnected });
+  const { data: readData, refetch } = useContractRead({
+    address: contractAddress,
+    abi: abi,
+    functionName: 'getRecord',
+    args: ['https://lemonde.fr'],
+  });
 
+
+
+  console.log({ address, isConnecting, isConnected, writeData, isWriting, isWriteSuccess, readData });
 
   return (
     <div className="w-[400px] h-[600px] bg-base-200/50 p-3 text-center">
@@ -71,8 +79,13 @@ function App() {
             }}
         >
           Contribute Now!
-          {/*<div className="badge badge-oprimary">+152</div>*/}
         </button>
+        {/*<button*/}
+        {/*  className="btn btn-primary mt-2"*/}
+        {/*  onClick={() => refetch()}*/}
+        {/*>*/}
+        {/*  Read*/}
+        {/*</button>*/}
       </header>
         {isConnected
             ? (
