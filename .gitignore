@@ -1,7 +1,8 @@
 *.ipynb
-data_service/*.json
+*.json
 *venv*
 *secret*
+*.ipynb
 .DS_Store
 node_modules/
-
+*__pycache__*

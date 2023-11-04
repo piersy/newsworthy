@@ -1,0 +1,13 @@
+{
+  "name": "app",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Send article mails",
+  "main": "sendEmail.js",
+  "scripts": {
+    "start": "node sendEmail.js"
+  },
+  "dependencies": {
+    "ethers": "^5.7.2"
+  }
+}

@@ -15,7 +15,7 @@ def store_address_mapping(address, _id, url):
     if _id not in mapping:
         mapping[_id] = {"url": url, "addresses": []}
     if address not in mapping[_id]:
-        mapping[_id].append([address])
+        mapping[_id]["addresses"].append([address])
     with open(default_path / "mapping.json", "r") as f:
         mapping = json.load(f)
     return None
