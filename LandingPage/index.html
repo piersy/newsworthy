@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GitNews - Version Control & Bias Detector for News</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.4.0/font/bootstrap-icons.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Times New Roman", serif;
+      }
+      .highlight {
+        color: #f1502f;
+      }
+      .bg-highlight {
+        background-color: #f1502f;
+      }
+      .border-highlight {
+        border-color: #f1502f;
+      }
+      /* Additional styles for tech-stack icons */
+      .tech-stack {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .card-img-top {
+        max-width: 70%;
+        height: auto;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 20px;
+      }
+      .tech-icon {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .center-row {
+        justify-content: center; /* This will center the columns when using flexbox */
+        display: flex; /* Make sure this is a flex container */
+        flex-wrap: wrap; /* Allow wrapping for responsiveness */
+      }
+      .animated-line {
+        width: 0; /* Start with a line of zero width */
+        height: 3px; /* Thickness of the line */
+        background-color: #f1502f; /* Your theme color */
+        margin: 20px auto; /* Centers the line */
+        animation: expandLine 3s forwards; /* Animation to expand the line */
+      }
+
+      /* Keyframes for the line animation */
+      @keyframes expandLine {
+        to {
+          width: 100%; /* End with full width */
+        }
+      }
+    </style>
+    <link
+      href="https://cdn.jsdelivr.net/npm/aos@2.3.1/dist/aos.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container">
+        <a class="navbar-brand highlight" href="#"><strong>Git</strong>News</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#about">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#features">Features</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#tech-stack">Tech-Stack</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#team">Team</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="py-5 bg-highlight text-white text-center">
+      <div class="container my-4" id="logo">
+        <img
+          src="./assets/images/logo.svg"
+          alt="GitNews Logo"
+          class="mb-4"
+          width="200px"
+          height="200px"
+        />
+      </div>
+      <div class="container">
+        <h1 class="display-7">#GitTheTruth</h1>
+        <p class="lead">Version Control & Bias Detector on News articles.</p>
+        <a href="#" class="btn btn-light mt-3"
+          >Try the GitNews Chrome extension</a
+        >
+      </div>
+    </header>
+
+    <!-- About Section -->
+    <section id="about" class="py-5">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-10 mx-auto">
+            <div class="about-content" data-aos="fade-up">
+              <h2>About <strong>Git</strong>News</h2>
+              <p class="lead">
+                GitNews is a Chrome extension that enhances the transparency of
+                online news. It enables users to view the edit history of news
+                articles, similar to a version control system, ensuring that any
+                changes made post-publication are visible and accountable.
+                Additionally, GitNews utilizes artificial intelligence to
+                analyze articles for bias, giving each a neutrality score. This
+                helps users distinguish fact from potential editorial bias. The
+                extension simplifies the use of blockchain technology, offering
+                a user-friendly interface that requires no prior blockchain
+                knowledge. Users can interact with the service using existing
+                wallets or create a new one, with a focus on maintaining
+                anonymity and privacy. The aim of GitNews is to foster a more
+                transparent and trustworthy news ecosystem.
+              </p>
+            </div>
+            <!-- Challenges and Solutions -->
+            <div class="animated-line" data-aos="zoom-in"></div>
+            <div class="challenges-solutions" data-aos="fade-left">
+              <h3>What's wrong with News? 🙅</h3>
+              <p class="lead">
+                👎 News are often biased by journalist or media.<br />
+                👎 News are often censored & edited after publication.<br />
+                👎 News are often inaccurate with unchecked data.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="py-5 bg-light">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-10 mx-auto">
+            <!-- Features -->
+            <br />
+            <div class="features" data-aos="zoom-in">
+              <h2>Features</h2>
+              <div class="row">
+                <!-- Feature Card -->
+                <div class="col-md-6 mb-3 feature-card" data-aos="flip-left">
+                  <div class="card h-100">
+                    <div class="card-body">
+                      <h4 class="card-title">Tracking Edits with Blockchain</h4>
+                      <p class="card-text">
+                        - Clicking the GitNews extension captures the news
+                        article's current state, logs its unique hash onto the
+                        blockchain, and cross-references it with existing
+                        records to track any alterations. <br />
+                        - Discover the evolution of a news piece with an
+                        accessible version history and specific content
+                        modifications, akin to a GitHub experience for news.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <!-- ... other feature cards ... -->
+                <div class="col-md-6 mb-3 feature-card" data-aos="flip-left">
+                  <div class="card h-100">
+                    <div class="card-body">
+                      <h4 class="card-title">Detecting Bias with AI</h4>
+                      <p class="card-text">
+                        - GitNews employs AI analysis for each article
+                        iteration, providing category, summary, and a neutrality
+                        score between 0 (biased) to 1 (neutral).<br />
+                        - The higher the neutrality score, the more factual the
+                        content, enabling readers to gauge the objectivity of
+                        the information presented.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-3 feature-card" data-aos="flip-left">
+                  <div class="card h-100">
+                    <div class="card-body">
+                      <h4 class="card-title">
+                        Ensuring integrity with Blockchain
+                      </h4>
+                      <p class="card-text">
+                        - Immutable records of article URLs and hashes are
+                        stored on the blockchain, ensuring permanent,
+                        unalterable evidence of journalistic integrity.
+                        <br />
+                        - Updates to previously verified articles trigger
+                        notifications to all contributors through
+                        WalletConnect’s Web3Inbox & iExec’s Web3Mail,
+                        maintaining transparency.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-3 feature-card" data-aos="flip-left">
+                  <div class="card h-100">
+                    <div class="card-body">
+                      <h4 class="card-title">
+                        Web2 Simplicity with Web3 Security
+                      </h4>
+                      <p class="card-text">
+                        - Users can either connect with their existing wallet
+                        via WalletConnect or connect with Google or social
+                        accounts via SAFE AA SDK. <br />- Anonymity is
+                        respected; users are known only by their wallet
+                        addresses, ensuring privacy.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-3 feature-card" data-aos="flip-left">
+                  <div class="card h-100">
+                    <div class="card-body">
+                      <h4 class="card-title">
+                        Incentivizing Quality Contributions
+                      </h4>
+                      <p class="card-text">
+                        - Every article check by users is stored as a unique
+                        blockchain entry, building a foundation for future
+                        incentives.<br />
+                        - Our vision extends beyond the hackathon, envisaging a
+                        reward system for contributors who value integrity over
+                        incentives.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tech-Stack Section -->
+    <section id="tech-stack" class="py-5">
+      <div class="container">
+        <h2 class="text-center mb-4">Tech-Stack Used</h2>
+        <div class="row row-cols-1 row-cols-md-4 g-4">
+          <div class="col">
+            <div class="card h-100">
+              <img
+                src="./assets/images/WalletConnectLogo.png"
+                class="card-img-top"
+                alt="WalletConnect’s Web3Inbox"
+              />
+              <div class="card-body">
+                <h5 class="card-title">WalletConnect’s Web3Inbox</h5>
+                <p class="card-text">
+                  A secure inbox protocol for seamless communication with dApps.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card h-100">
+              <img
+                src="./assets/images/iExec.png"
+                class="card-img-top"
+                alt="iExec’s Web3Email"
+              />
+              <div class="card-body">
+                <h5 class="card-title">iExec’s Web3Email</h5>
+                <p class="card-text">
+                  Decentralized email services powered by blockchain for
+                  enhanced privacy.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card h-100">
+              <img
+                src="./assets/images/polygon-matic-logo.png"
+                class="card-img-top"
+                alt="Polygon’s zkEVM"
+              />
+              <div class="card-body">
+                <h5 class="card-title">Polygon’s zkEVM</h5>
+                <p class="card-text">
+                  Scalability and security using zero-knowledge proof technology
+                  on Ethereum.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card h-100">
+              <img
+                src="./assets/images/SAFE_clean_logo.png"
+                class="card-img-top"
+                alt="SAFE{Core} Account Abstraction SDK"
+              />
+              <div class="card-body">
+                <h5 class="card-title">SAFE{Core} SDK</h5>
+                <p class="card-text">
+                  Flexible and secure account management for dApps with
+                  abstracted account layers.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Team Section -->
+    <section id="team" class="py-5 bg-light">
+      <div class="container">
+        <h2 class="text-center mb-4">Our Team</h2>
+        <div class="row g-4 center-row">
+          <!-- Team Member 1 -->
+          <div class="col-6 col-md-4 col-lg-3 col-xl-2">
+            <div class="card h-100">
+              <img
+                src="./assets/images/hojay.jpeg"
+                class="card-img-top"
+                alt="Piers"
+              />
+              <div class="card-body text-center">
+                <h5 class="card-title">Hojay</h5>
+                <p class="card-text">Project</p>
+              </div>
+              <div class="card-footer text-center">
+                <a href="https://twitter.com/hojayxyz" class="text-muted">
+                  <i class="bi bi-twitter"></i>
+                </a>
+                <a href="https://github.com/hojayxyz" class="text-muted">
+                  <i class="bi bi-github"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/hojay/" class="text-muted">
+                  <i class="bi bi-linkedin"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          <!-- Team Member 2 -->
+          <!-- Repeat the above block for each team member, replacing the placeholders accordingly -->
+          <div class="col-6 col-md-4 col-lg-3 col-xl-2">
+            <div class="card h-100">
+              <img
+                src="./assets/images/viktor.jpeg"
+                class="card-img-top"
+                alt="Piers"
+              />
+              <div class="card-body text-center">
+                <h5 class="card-title">Viktor</h5>
+                <p class="card-text">Backend</p>
+              </div>
+              <div class="card-footer text-center">
+                <a href="https://twitter.com/VF_Particula" class="text-muted">
+                  <i class="bi bi-twitter"></i>
+                </a>
+                <a href="https://github.com/vfcapital" class="text-muted">
+                  <i class="bi bi-github"></i>
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/viktor-fendesak/"
+                  class="text-muted"
+                >
+                  <i class="bi bi-linkedin"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          <!-- The rest of the team members go here, replicate the above div block for each one -->
+          <div class="col-6 col-md-4 col-lg-3 col-xl-2">
+            <div class="card h-100">
+              <img
+                src="./assets/images/Pedro.jpeg"
+                class="card-img-top"
+                alt="Piers"
+              />
+              <div class="card-body text-center">
+                <h5 class="card-title">Pedro</h5>
+                <p class="card-text">Frontend</p>
+              </div>
+              <div class="card-footer text-center">
+                <a href="https://twitter.com/pedrosimao" class="text-muted">
+                  <i class="bi bi-twitter"></i>
+                </a>
+                <a href="https://github.com/pedrosimao" class="text-muted">
+                  <i class="bi bi-github"></i>
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/pedrosimao/"
+                  class="text-muted"
+                >
+                  <i class="bi bi-linkedin"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-4 col-lg-3 col-xl-2">
+            <div class="card h-100">
+              <img
+                src="./assets/images/Piers.jpeg"
+                class="card-img-top"
+                alt="Piers"
+              />
+              <div class="card-body text-center">
+                <h5 class="card-title">Piers</h5>
+                <p class="card-text">Product</p>
+              </div>
+              <div class="card-footer text-center">
+                <a href="https://twitter.com/piersypops" class="text-muted">
+                  <i class="bi bi-twitter"></i>
+                </a>
+                <a href="https://github.com/piersy" class="text-muted">
+                  <i class="bi bi-github"></i>
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/piers-powlesland/"
+                  class="text-muted"
+                >
+                  <i class="bi bi-linkedin"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-4 col-lg-3 col-xl-2">
+            <div class="card h-100">
+              <img
+                src="./assets/images/Filipe.jpeg"
+                class="card-img-top"
+                alt="Piers"
+              />
+              <div class="card-body text-center">
+                <h5 class="card-title">Filipe</h5>
+                <p class="card-text">Solidity</p>
+              </div>
+              <div class="card-footer text-center">
+                <a href="https://twitter.com/username1" class="text-muted">
+                  <i class="bi bi-twitter"></i>
+                </a>
+                <a href="https://github.com/Fils7" class="text-muted">
+                  <i class="bi bi-github"></i>
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/filipe-rey-5bb186250/"
+                  class="text-muted"
+                >
+                  <i class="bi bi-linkedin"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about-features" class="py-5">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-10 mx-auto">
+            <!-- News Revolution -->
+            <div class="news-revolution mt-2" data-aos="fade-up">
+              <h3>Join the News Revolution</h3>
+              <p>
+                GitNews isn't just a tool; it's a movement towards incentivizing
+                journalistic integrity and unaltered reporting. Be a part of
+                reshaping the future where news remains factual, and trust is
+                paramount.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-3 bg-light">
+      <div class="container text-center">
+        <p class="mb-0">
+          © 2023 GitNews. Made with 💙 in ETH Lisbon. All Rights Reserved.
+        </p>
+      </div>
+    </footer>
+
+    <!-- Bootstrap JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      AOS.init({
+        duration: 800, // values from 0 to 3000, with step 50ms
+        easing: "ease-in-out-back", // default easing for AOS animations
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,37 @@
+<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+<!--Stylized folded Newspaper-->
+  <rect x="0" y="0" width="100" height="100" fill="#e0e0e0" rx="10" ry="10"/>
+  <line x1="10" y1="20" x2="10" y2="20" stroke="#000" stroke-width="2">
+    <animate attributeName="x2" from="10" to="90" dur="0.5s" fill="freeze" begin="0s"/>
+  </line>
+  <line x1="10" y1="35" x2="10" y2="35" stroke="#a0a0a0" stroke-width="1.5">
+    <animate attributeName="x2" from="10" to="90" dur="0.5s" fill="freeze" begin="0.2s"/>
+  </line>
+  <line x1="10" y1="50" x2="10" y2="50" stroke="#a0a0a0" stroke-width="1.5">
+    <animate attributeName="x2" from="10" to="90" dur="0.5s" fill="freeze" begin="0.4s"/>
+  </line>
+  <line x1="10" y1="65" x2="10" y2="65" stroke="#a0a0a0" stroke-width="1.5">
+    <animate attributeName="x2" from="10" to="90" dur="0.5s" fill="freeze" begin="0.6s"/>
+  </line>
+<!--Dynamic Checkmark represented as three connected dots-->
+  <circle cx="25" cy="45" r="0" fill="#F1502F">
+    <animate attributeName="r" from="0" to="6" dur="0.2s" fill="freeze" begin="0.8s"/>
+  </circle>
+  <circle cx="50" cy="65" r="0" fill="#F1502F">
+    <animate attributeName="r" from="0" to="6" dur="0.2s" fill="freeze" begin="1s"/>
+  </circle>
+  <circle cx="75" cy="35" r="0" fill="#F1502F">
+    <animate attributeName="r" from="0" to="6" dur="0.2s" fill="freeze" begin="1.2s"/>
+  </circle>
+  <line x1="25" y1="45" x2="25" y2="45" stroke="#F1502F" stroke-width="4">
+    <animate attributeName="x2" from="25" to="50" dur="0.2s" fill="freeze" begin="1.4s"/>
+    <animate attributeName="y2" from="45" to="65" dur="0.2s" fill="freeze" begin="1.4s"/>
+  </line>
+  <line x1="50" y1="65" x2="50" y2="65" stroke="#F1502F" stroke-width="4">
+    <animate attributeName="x2" from="50" to="75" dur="0.2s" fill="freeze" begin="1.6s"/>
+    <animate attributeName="y2" from="65" to="35" dur="0.2s" fill="freeze" begin="1.6s"/>
+  </line>
+<!--Text "NewsGit"-->
+  <text x="11" y="90" font-family="Times New Roman" font-size="21" font-weight="bold" fill="#000">Git</text>
+  <text x="43" y="90" font-family="Times New Roman" font-size="21" fill="#000">News</text>
+</svg>
