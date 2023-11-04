@@ -7,6 +7,13 @@ import loader
 import classifier
 from fastapi import FastAPI, Query
 from pydantic import BaseModel
+import urllib.parse
+
+
+def url_decode(url):
+    if '%' in url:
+        return urllib.parse.unquote(url)
+    return url
 
 
 def store_address_mapping(address, _id, url):
@@ -38,7 +45,7 @@ class ArticlePayload(BaseModel):
 async def read_item(
     payload: ArticlePayload,
 ):
-    url = payload.url
+    url = url_decode(payload.url)
     address = payload.address
     loader.main(url)
     classifier.main()
@@ -54,6 +61,7 @@ async def read_item(
 
 @app.get("/archive")
 def read_archive(url: str = Query(None, description="URL Parameter")):
+    url = url_decode(url)
     storage_path = Path(__file__).parent / "storage"
     files = {}
     if url is not None:
