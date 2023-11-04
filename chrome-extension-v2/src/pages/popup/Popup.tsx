@@ -1,5 +1,6 @@
 import React from 'react';
 import { WagmiConfig, sepolia } from 'wagmi'
+import { polygonZkEvmTestnet } from '@wagmi/core/chains'
 import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react'
 
 import PopupContent from './PopupContent';
@@ -18,7 +19,7 @@ const metadata = {
 }
 
 
-const chains = [sepolia]
+const chains = [polygonZkEvmTestnet, sepolia]
 const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata })
 
 // 3. Create modal

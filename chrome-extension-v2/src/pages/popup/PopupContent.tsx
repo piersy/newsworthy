@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { useAccount, useContractWrite, useContractRead, usePublicClient } from 'wagmi'
 import { useWeb3Modal } from '@web3modal/wagmi/react'
@@ -7,12 +7,24 @@ import { useWeb3Modal } from '@web3modal/wagmi/react'
 import withSuspense from '@src/shared/hoc/withSuspense';
 import withErrorBoundary from '@src/shared/hoc/withErrorBoundary';
 
-import { abi } from '@src/shared/abi';
+import { abi, polygonAbi } from '@src/shared/abi';
+import { postArticle } from "@src/shared/api";
 import '@src/index.css';
 
-const contractAddress = '0xFF5916AAB47613988841c3d2FF137e40DaE3590d';
+// const contractAddress = '0xFF5916AAB47613988841c3d2FF137e40DaE3590d';
+const contractAddress = '0xb640a463258f81d841824e3ee70f70ced3ba6fab';
 
 const Popup = () => {
+    const [currentUrl, setCurrentUrl] = useState('');
+
+
+    useEffect(() => {
+        chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
+            setCurrentUrl(tabs[0].url);
+        });
+    }, [])
+
+
   // const theme = useStorage(exampleThemeStorage);
 
 
@@ -30,17 +42,18 @@ const Popup = () => {
 
   const { data: writeData, isLoading: isWriting, isSuccess: isWriteSuccess, write } = useContractWrite({
     address: contractAddress,
-    abi: abi,
+    abi: polygonAbi,
     functionName: 'add',
   });
 
-  const { data: readData } = useContractRead({
+  const { data: readData, refetch } = useContractRead({
     address: contractAddress,
     abi: abi,
     functionName: 'getRecord',
-    args: ['https://lemonde.fr'],
+    args: [currentUrl],
   });
 
+    useEffect(() => {refetch();}, [isWriteSuccess]);
 
   console.log({ address, isConnecting, isConnected, writeData, isWriting, isWriteSuccess, readData });
 
@@ -48,25 +61,34 @@ const Popup = () => {
     <div>
       <div className="w-[450px] h-[650px] bg-base-200/50 p-3 text-center">
       <header className="flex flex-col align-middle justify-evenly prose">
-        <h1 className="mb-2 prose-lg">Git News</h1>
+        <h1 className="mb-2 prose-lg">Git News erferf</h1>
         <button className="btn btn-sm mb-2" onClick={() => open()}>Open Connect Modal</button>
         <button
-            className="btn btn-primary"
-            onClick={() => {
-              write({
-                args: ['https://lemonde.fr', '0x0f186bb32930ee6759eda47aff152d9be149067d42fc3b48677c77548aedb392'],
-                from: address,
-              })
+            className={clsx('btn btn-primary', isWriting && 'btn-disabled')}
+            onClick={async () => {
+                const { data } = await postArticle({
+                    url: currentUrl,
+                    walletAddress: address ? String(address) : null
+                });
+                console.log({ data });
+                const article = data?.article;
+                const keys = Object.keys(article.versions);
+                const lastKey = keys[keys.length - 1];
+                const lastVersion = article?.versions[lastKey];
+                console.log({ lastVersion })
+                // @ts-ignore
+                  await write({
+                    args: [
+                        currentUrl,
+                        '0x' + lastVersion?.hash,
+                    ],
+                    from: address,
+                  });
             }}
         >
           Contribute Now!
+          {isWriting ? <span className="loading loading-spinner loading-xs"/> : null}
         </button>
-        {/*<button*/}
-        {/*  className="btn btn-primary mt-2"*/}
-        {/*  onClick={() => refetch()}*/}
-        {/*>*/}
-        {/*  Read*/}
-        {/*</button>*/}
       </header>
         {isConnected
             ? (
@@ -74,45 +96,22 @@ const Popup = () => {
                     <div className="h-full w-full round flex flex-col overflow-auto mb-2 rounded-md pt-4 pr-4">
                         {tab === 0 ?
                             (<div>
-                                <div className="indicator w-full mb-3">
-                                    <span className="indicator-item badge badge-accent mr-6 mt-1">135+</span>
+                                {/* @ts-ignore */}
+                                {readData?.length ? readData?.map((item, index) => (
+                                    <div className="indicator w-full mb-3" key={item.urlHash}>
+                                    <span className="indicator-item badge badge-accent mr-6 mt-1">{Number(item.counter)}+</span>
                                     <div className="card bg-secondary-content text-neutral-content hover:bg-secondary-content/80">
                                         <div className="card-body prose text-left p-3">
                                             <div className="flex mt-1">
-                                                <span className="card-title prose prose-base m-0 p-0 mr-2">v1</span>
-                                                <span className="truncate max-w-[300px] prose porse-sm">729b2c7a9b2458436f1b6fedd90696e09da07438cf6df47b961fb9093363e13d</span>
+                                                <span className="card-title prose prose-base m-0 p-0 mr-2">v{index + 1}</span>
+                                                <span className="truncate max-w-[300px] prose porse-sm">{item.urlHash}</span>
                                             </div>
                                             <p className="prose-sm m-0 p-0">NY Times - Netanyahu Appears to Rebuff Blinken’s Request for Humanitarian Pauses</p>
-                                            <a className="truncate max-w-[350px] link link-secondary m-0 p-0 prose prose-sm">https://www.nytimes.com/2023/11/03/technology/israel-hamas-information-war.html</a>
+                                            <a className="truncate max-w-[350px] link link-secondary m-0 p-0 prose prose-sm" href={currentUrl} target="_blank" rel="noopener noreferrer">{currentUrl}</a>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="indicator w-full mb-3">
-                                    <span className="indicator-item badge badge-accent mr-6 mt-1">33+</span>
-                                    <div className="card bg-secondary-content text-neutral-content hover:bg-secondary-content/80">
-                                        <div className="card-body prose text-left p-3">
-                                            <div className="flex mt-1">
-                                                <span className="card-title prose prose-base m-0 p-0 mr-2">v2</span>
-                                                <span className="truncate max-w-[300px] prose porse-sm">dba9bdf4d07e0baa70fb16170eef63429c706af1da53160cb668182e8cf9c432</span>
-                                            </div>
-                                            <p className="prose-sm m-0 p-0">NY Times - Netanyahu Appears to Rebuff Blinken’s Request for Humanitarian Pauses</p>
-                                            <a className="truncate max-w-[350px] link link-secondary m-0 p-0 prose prose-sm">https://www.nytimes.com/2023/11/03/technology/israel-hamas-information-war.html</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="indicator w-full mb-3">
-                                    <span className="indicator-item badge badge-accent mr-6 mt-1">12+</span>
-                                    <div className="card bg-secondary-content text-neutral-content hover:bg-secondary-content/80">
-                                        <div className="card-body prose text-left p-3">
-                                            <div className="flex mt-1">
-                                                <span className="card-title prose prose-base m-0 p-0 mr-2">v3</span>
-                                                <span className="truncate max-w-[300px] prose porse-sm">09a2da24847a1dce454a4a40724f379e594113a7a9ed353e9dc310ca2dedd30e</span>
-                                            </div>
-                                            <p className="prose-sm m-0 p-0">NY Times - Netanyahu Appears to Rebuff Blinken’s Request for Humanitarian Pauses</p>
-                                            <a className="truncate max-w-[350px] link link-secondary m-0 p-0 prose prose-sm">https://www.nytimes.com/2023/11/03/technology/israel-hamas-information-war.html</a>
-                                        </div>
-                                    </div>
-                                </div>
+                                )) : 'No contributions yet...'}
                             </div>)
                             : (<div>
                                 <div className="stat">

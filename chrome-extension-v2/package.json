@@ -27,6 +27,7 @@
     "@iexec/dataprotector": "^0.3.0",
     "@tailwindcss/typography": "^0.5.10",
     "@web3modal/wagmi": "^3.2.0",
+    "axios": "^1.6.0",
     "clsx": "^2.0.0",
     "construct-style-sheets-polyfill": "^3.1.0",
     "daisyui": "^3.9.4",
