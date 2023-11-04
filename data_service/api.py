@@ -6,6 +6,7 @@ import mail
 import loader
 import classifier
 from fastapi import FastAPI, Query
+from pydantic import BaseModel
 
 
 def store_address_mapping(address, _id, url):
@@ -29,11 +30,16 @@ def read_root():
     return "Please use endpoint /archive or /articles"
 
 
+class ArticlePayload(BaseModel):
+    url: str
+    address: str | None = None
+
 @app.post("/articles")
 async def read_item(
-    url: str = Query(..., description="URL Parameter"),
-    address: str = Query(None, description="User address Parameter")
+    payload: ArticlePayload,
 ):
+    url = payload.url
+    address = payload.address
     loader.main(url)
     classifier.main()
     _id = str(uuid.uuid5(uuid.NAMESPACE_URL, url))
