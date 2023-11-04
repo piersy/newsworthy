@@ -2,7 +2,7 @@
     "include": ["./scripts", "./test", "./typechain-types"],
     "files": ["./hardhat.config.ts"],
   "compilerOptions": {
-    "target": "es2020",
+    "target": "es2017",
     "module": "commonjs",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,

@@ -1,15 +1,15 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.19;
+pragma solidity 0.8.20;
 
-import "hardhat/console.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol";
 
-/**
- * @title  
- * @author  
- * @notice  This is a basic crowd funding / DAO contract with a multi-signature 
-*/
+contract GitNews is ERC20, ERC20Permit {
+    constructor() ERC20("GitNews", "GN") ERC20Permit("GitNews") {}
+}
 
-contract NewsWorthy {
+
+contract NewsWorthy is GitNews {
 
     uint counter; // Count visitors of the URL.
     mapping(bytes32 => pageVersionData[]) public urlDataMap;
@@ -19,6 +19,7 @@ contract NewsWorthy {
         uint counter;
         bytes32 urlHash;
     }
+
 
     // Function to turn URL in a hash.
     function add(string memory url, bytes32 hash) public {
@@ -36,6 +37,8 @@ contract NewsWorthy {
         if (!foundMatch) {
              urlDataMap[key].push(pageVersionData({counter: 1, urlHash: hash}));
         }
+
+        _mint(msg.sender, 5);
 
     }
 
