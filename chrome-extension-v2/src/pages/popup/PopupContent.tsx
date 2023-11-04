@@ -1,32 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
-import { useAccount, useContractWrite, useContractRead, usePublicClient } from 'wagmi'
 import { useWeb3Modal } from '@web3modal/wagmi/react'
+import { useAccount, useContractWrite, useContractRead, useBalance } from 'wagmi'
 // import { IExecDataProtector } from '@iexec/dataprotector';
 
 import withSuspense from '@src/shared/hoc/withSuspense';
 import withErrorBoundary from '@src/shared/hoc/withErrorBoundary';
 
 import { abi, polygonAbi } from '@src/shared/abi';
-import { postArticle } from "@src/shared/api";
+import { postArticle, getArchive } from "@src/shared/api";
 import '@src/index.css';
 
 // const contractAddress = '0xFF5916AAB47613988841c3d2FF137e40DaE3590d';
-const contractAddress = '0xb640a463258f81d841824e3ee70f70ced3ba6fab';
-
+const contractAddress = '0xcad8374fba8d1e988c00f1fc79eb711ae2bbe452';
+const decimals = 1000000000000000000;
 const Popup = () => {
     const [currentUrl, setCurrentUrl] = useState('');
+    const [history, setHistory] = useState();
 
-
+    // Get current url on mount
     useEffect(() => {
         chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
+            console.log('DEBUG TABS', tabs);
+            console.log('DEBUG URL', tabs[0].url);
             setCurrentUrl(tabs[0].url);
         });
     }, [])
 
-
+    // When we have a currentUrl we can fetch the history
+    useEffect(() => {
+        const getHistory = async () => {
+            if(currentUrl) {
+                const { data } = await getArchive({ url: currentUrl });
+                console.log({ article: data.article })
+                if(data.article) setHistory(data.article);
+            }
+        }
+        getHistory()
+    }, [currentUrl])
   // const theme = useStorage(exampleThemeStorage);
-
 
   // const web3Provider = usePublicClient();
   // const web3Provider = window.ethereum;
@@ -53,15 +65,35 @@ const Popup = () => {
     args: [currentUrl],
   });
 
-    useEffect(() => {refetch();}, [isWriteSuccess]);
+    const { data: balanceData, refetch: refetchBalance } = useBalance({
+        address: address,
+        token: contractAddress,
+    })
 
-  console.log({ address, isConnecting, isConnected, writeData, isWriting, isWriteSuccess, readData });
+    useEffect(() => {
+        setTimeout(() => {
+            refetch();
+            refetchBalance();
+        }, 3000)
+    }, [isWriteSuccess]);
+
+    const matchArticle = (article: { [key: string]: Record<string, unknown> }, hash: string) => {
+        console.log({ article, hash });
+        // find article where value of key hash is equal to hash
+        if(article?.versions) {
+            const allVersions = Object.values(article.versions);
+            return allVersions.find((version) => '0x' + version.hash === hash);
+        }
+        return null
+    }
+
+  // console.log({ address, isConnecting, isConnected, writeData, isWriting, isWriteSuccess, readData });
 
   return (
     <div>
       <div className="w-[450px] h-[650px] bg-base-200/50 p-3 text-center">
       <header className="flex flex-col align-middle justify-evenly prose">
-        <h1 className="mb-2 prose-lg">Git News erferf</h1>
+        <h1 className="mb-2 prose-lg">Git News</h1>
         <button className="btn btn-sm mb-2" onClick={() => open()}>Open Connect Modal</button>
         <button
             className={clsx('btn btn-primary', isWriting && 'btn-disabled')}
@@ -97,7 +129,9 @@ const Popup = () => {
                         {tab === 0 ?
                             (<div>
                                 {/* @ts-ignore */}
-                                {readData?.length ? readData?.map((item, index) => (
+                                {readData?.length ? readData?.map((item, index) => {
+                                    const version = matchArticle(history, item?.urlHash);
+                                    return(
                                     <div className="indicator w-full mb-3" key={item.urlHash}>
                                     <span className="indicator-item badge badge-accent mr-6 mt-1">{Number(item.counter)}+</span>
                                     <div className="card bg-secondary-content text-neutral-content hover:bg-secondary-content/80">
@@ -106,17 +140,21 @@ const Popup = () => {
                                                 <span className="card-title prose prose-base m-0 p-0 mr-2">v{index + 1}</span>
                                                 <span className="truncate max-w-[300px] prose porse-sm">{item.urlHash}</span>
                                             </div>
-                                            <p className="prose-sm m-0 p-0">NY Times - Netanyahu Appears to Rebuff Blinken’s Request for Humanitarian Pauses</p>
-                                            <a className="truncate max-w-[350px] link link-secondary m-0 p-0 prose prose-sm" href={currentUrl} target="_blank" rel="noopener noreferrer">{currentUrl}</a>
+                                            <p className="prose-sm m-0 p-0">{version?.title ? version.title : null}</p>
+                                            <a className="truncate max-w-[350px] link link-secondary m-0 p-0 prose prose-sm" href={currentUrl} target="_blank" rel="noopener noreferrer">
+                                                {currentUrl}
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
-                                )) : 'No contributions yet...'}
+                                )}) : 'No contributions yet...'}
                             </div>)
                             : (<div>
                                 <div className="stat">
                                     <div className="stat-desc text-primary">{address}</div>
-                                    <div className="stat-value">233.11 GN</div>
+                                    <div className="stat-value">
+                                        {Number(balanceData.value) / decimals + ' ' + balanceData.symbol}
+                                    </div>
                                     <div className="stat-title">Rewards for Contributions</div>
                                     <div className="stat-desc text-secondary">151 contributions</div>
                                 </div>
