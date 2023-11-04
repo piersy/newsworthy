@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { useWeb3Modal } from '@web3modal/wagmi/react'
-import { useAccount, useContractWrite, useContractRead, useBalance } from 'wagmi'
+import { useAccount, useContractWrite, useContractRead, useBalance, useWalletClient } from 'wagmi'
 
-// import { IExecDataProtector } from '@iexec/dataprotector';
+import { IExecDataProtector } from '@iexec/dataprotector';
 
 
 import withSuspense from '@src/shared/hoc/withSuspense';
@@ -11,6 +11,7 @@ import withErrorBoundary from '@src/shared/hoc/withErrorBoundary';
 
 import { polygonAbi } from '@src/shared/abi';
 import { postArticle, getArchive } from "@src/shared/api";
+import emailStorage from '@src/shared/storages/emailStorage';
 import '@src/index.css';
 
 const contractAddress = '0x8f7b2c515aba3f8109e690c37be27f8b1e917bcd';
@@ -18,6 +19,7 @@ const decimals = 1000000000000000000;
 const Popup = () => {
     const [currentUrl, setCurrentUrl] = useState('');
     const [history, setHistory] = useState();
+    const [email, setEmail] = useState('');
 
     // Get current url on mount
     useEffect(() => {
@@ -26,7 +28,13 @@ const Popup = () => {
             console.log('DEBUG URL', tabs[0].url);
             setCurrentUrl(tabs[0].url);
         });
+        emailStorage.get().then((initEmail) => {
+            console.log({ initEmail });
+            if(initEmail) setEmail(initEmail);
+        });
+
     }, [])
+
 
     // When we have a currentUrl we can fetch the history
     useEffect(() => {
@@ -41,10 +49,10 @@ const Popup = () => {
     }, [currentUrl])
   // const theme = useStorage(exampleThemeStorage);
 
-  // const web3Provider = usePublicClient();
+  const web3Provider = useWalletClient();
   // const web3Provider = window.ethereum;
   // instantiate
-  // const dataProtector = new IExecDataProtector(web3Provider);
+  const dataProtector = new IExecDataProtector(web3Provider);
 
   const { open } = useWeb3Modal()
   const [tab, setTab] = useState(0);
@@ -85,8 +93,6 @@ const Popup = () => {
         }, 3000)
     }, [isWriteSuccess]);
 
-    console.log({ contribData });
-
     const matchArticle = (article: { [key: string]: Record<string, unknown> }, hash: string) => {
         console.log({ article, hash });
         // find article where value of key hash is equal to hash
@@ -97,7 +103,7 @@ const Popup = () => {
         return null
     }
 
-  // console.log({ address, isConnecting, isConnected, writeData, isWriting, isWriteSuccess, readData });
+  console.log({ address, isConnecting, isConnected, writeData, isWriting, isWriteSuccess, readData, dataProtector, contribData  });
 
   return (
     <div>
@@ -170,12 +176,21 @@ const Popup = () => {
                                 </div>
                                 <div className="stat">
                                     <label className="label">
-                                        <span className="label-text">E-Mail?</span>
-                                        <span className="label-text-alt">Get notified <input type="checkbox" checked="checked" className="checkbox checkbox-sm checkbox-primary" /></span>
+                                        <span className="label-text">E-Mail</span>
+                                        {/*<span className="label-text-alt">Get notified <input type="checkbox" checked="checked" className="checkbox checkbox-sm checkbox-primary" /></span>*/}
                                     </label>
                                     <div className="join">
-                                        <input type="text" placeholder="ex.: me@mail.com" className="input input-bordered input-primary w-full max-w-xs join-item" />
-                                        <button className="btn join-item rounded-r-full btn-outline">Save</button>
+                                        <input type="text" placeholder="ex.: me@mail.com" value={email} onChange={(evt) => setEmail(evt.target.value)} className="input input-bordered input-primary w-full max-w-xs join-item" />
+                                        <button className="btn join-item rounded-r-full btn-outline" onClick={async () => {
+                                            console.log({ email });
+                                            emailStorage.set(email);
+                                            const protectedData = await dataProtector.protectData({
+                                                data: {
+                                                    email
+                                                }
+                                            });
+                                            console.log({ protectedData });
+                                        }}>Save</button>
                                     </div>
                                 </div>
                             </div>)
