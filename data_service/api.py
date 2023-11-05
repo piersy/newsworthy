@@ -11,7 +11,7 @@ import urllib.parse
 
 
 def url_decode(url):
-    if '%' in url:
+    if url is not None and '%' in url:
         return urllib.parse.unquote(url)
     return url
 
@@ -45,7 +45,8 @@ class ArticlePayload(BaseModel):
 async def read_item(
     payload: ArticlePayload,
 ):
-    url = url_decode(payload.url)
+    if url in payload:
+        url = url_decode(payload.url)
     address = payload.address
     loader.main(url)
     classifier.main()
