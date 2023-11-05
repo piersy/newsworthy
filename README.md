@@ -24,7 +24,6 @@ uvicorn api:app --reload
 #### API request
 
 Send collaboration to backend and trigger analysis mail:
-
 ```shell
 curl -X POST "http://127.0.0.1:8000/articles" \
 -H "Content-Type: application/json" \
@@ -35,6 +34,10 @@ curl -X POST "http://127.0.0.1:8000/articles" \
 ```
 where the address represents your iExec NFT address to your email address and the url can be any news article from any public news source.
 
+Get all articles locally archived by hosting machine:
+```shell
+curl -X GET "http://127.0.0.1:8000/archive" 
+```
 
 ## Mail Service (JavaScript)
 
