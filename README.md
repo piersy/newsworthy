@@ -1,9 +1,9 @@
-# newsworthy
+# Git News Backend
 
 
 ## Data Service (Python)
 
-### Python Setup
+#### Python Setup
 
 ```bash
 cd data_service
@@ -15,34 +15,26 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### Start API
+#### Start API
 
 ```bash
 uvicorn api:app --reload
 ```
 
-### API request
+#### API request
 
-get("http://127.0.0.1:8000/articles/", headers={"url": 'https://www.theguardian.com/world/2023/nov/04/some_article'})
+Send collaboration to backend and trigger analysis mail:
 
-Returns:
-
+```shell
+curl -X POST "http://127.0.0.1:8000/articles" \
+-H "Content-Type: application/json" \
+-d '{
+	"url": "https://www.theguardian.com/sport/2023/nov/04/mark-zuckerberg-torn-acl-mma-training-fight", 
+	"address": "0x29500F62084dB58D086821bf6A1DDFA180651480"
+}'
 ```
-{
-'url': 'https://www.theguardian.com/world/2023/nov/04/some_article',
-'versions':
-  {
-      '0': {
-          'title': 'This is a title',
-          'publish_date': '2023-11-04T00:00:00',
-          'article_text': 'After years of search...',
-           },
-      '1': {...},
-  },
-'tags': ['North America', 'Religion', 'International'],
-'neutrality': 0.9
-}
-```
+where the address represents your iExec NFT address to your email address and the url can be any news article from any public news source.
+
 
 ## Mail Service (JavaScript)
 
