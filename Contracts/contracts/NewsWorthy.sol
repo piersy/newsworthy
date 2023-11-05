@@ -11,8 +11,11 @@ contract GitNews is ERC20, ERC20Permit {
 
 contract NewsWorthy is GitNews {
 
+
     uint counter; // Count visitors of the URL.
+    uint numContributions;
     mapping(bytes32 => pageVersionData[]) public urlDataMap;
+    mapping(address => uint) public contributions;
 
     struct pageVersionData {
 
@@ -38,7 +41,8 @@ contract NewsWorthy is GitNews {
              urlDataMap[key].push(pageVersionData({counter: 1, urlHash: hash}));
         }
 
-        _mint(msg.sender, 5);
+        _mint(msg.sender, 5e18);
+        contributions[msg.sender]++;
 
     }
 
@@ -46,4 +50,11 @@ contract NewsWorthy is GitNews {
     function getRecord(string memory url) public view returns (pageVersionData[] memory) {
         return  urlDataMap[keccak256(abi.encode(url))];
     }
+
+    function getContributions() public view returns (uint) {
+        return contributions[msg.sender];
+
+    }
+
 }
+
