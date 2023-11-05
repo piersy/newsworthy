@@ -1,5 +1,10 @@
 import subprocess
 import json
+from pathlib import Path
+import yaml
+
+
+SECRETS_PATH = Path(__file__).parent
 
 
 def make_email_content(data):
@@ -17,10 +22,13 @@ def make_email_content(data):
 
 
 def send_analysis_mail(address, data):
+    with open(SECRETS_PATH / ".secrets.yaml", "r") as f:
+        secrets = yaml.load(f, Loader=yaml.FullLoader)
     input_data = {
         "addresses": address,
         "emailSubject": "Analysis of your requested article is here!",
         "emailContent": make_email_content(data),
+        "privateKey": secrets["PRIVATE_KEY"]
     }
     script_path = "../mail_service/app/sendEmail.js"
     command = ["node", script_path, json.dumps(input_data)]
