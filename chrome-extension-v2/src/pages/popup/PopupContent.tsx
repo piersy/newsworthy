@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { useWeb3Modal } from '@web3modal/wagmi/react'
 import { useAccount, useContractWrite, useContractRead, useBalance, useWalletClient } from 'wagmi'
-
 import { IExecDataProtector } from '@iexec/dataprotector';
-
 
 import withSuspense from '@src/shared/hoc/withSuspense';
 import withErrorBoundary from '@src/shared/hoc/withErrorBoundary';
@@ -15,7 +13,7 @@ import { postArticle, getArchive } from "@src/shared/api";
 
 import '@src/index.css';
 
-const contractAddress = '0x984f40cFf393B070eA5260B72afdd3175fE091bC';
+const contractAddress = '0x468e28d8f409c62112818336c680b11c3f6ef6a0';
 const decimals = 1000000000000000000;
 const Popup = () => {
     const [currentUrl, setCurrentUrl] = useState('');
@@ -25,27 +23,26 @@ const Popup = () => {
     // Get current url on mount
     useEffect(() => {
         chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
-            console.log('DEBUG TABS', tabs);
-            console.log('DEBUG URL', tabs[0].url);
+            // console.log('DEBUG TABS', tabs);
+            // console.log('DEBUG URL', tabs[0].url);
             setCurrentUrl(tabs[0].url);
         });
         emailStorage.get().then((initEmail) => {
-            console.log({ initEmail });
+            // console.log({ initEmail });
             if(initEmail) setEmail(initEmail);
         });
-
     }, [])
 
+    const getHistory = async () => {
+        if(currentUrl) {
+            const { data } = await getArchive({ url: currentUrl });
+            // console.log({ article: data.article })
+            if(data.article) setHistory(data.article);
+        }
+    }
 
     // When we have a currentUrl we can fetch the history
     useEffect(() => {
-        const getHistory = async () => {
-            if(currentUrl) {
-                const { data } = await getArchive({ url: currentUrl });
-                console.log({ article: data.article })
-                if(data.article) setHistory(data.article);
-            }
-        }
         getHistory()
     }, [currentUrl])
   // const theme = useStorage(exampleThemeStorage);
@@ -78,7 +75,7 @@ const Popup = () => {
     const { data: contribData, refetch: refetchContrib } = useContractRead({
         address: contractAddress,
         abi: polygonAbi,
-        functionName: 'seeContributions',
+        functionName: 'getContributions',
     });
 
     const { data: balanceData, refetch: refetchBalance } = useBalance({
@@ -90,12 +87,13 @@ const Popup = () => {
         setTimeout(() => {
             refetch();
             refetchBalance();
-            refetchContrib()
+            refetchContrib();
+            getHistory();
         }, 3000)
     }, [isWriteSuccess]);
 
     const matchArticle = (article: { [key: string]: Record<string, unknown> }, hash: string) => {
-        console.log({ article, hash });
+        // console.log({ article, hash });
         // find article where value of key hash is equal to hash
         if(article?.versions) {
             const allVersions = Object.values(article.versions);
@@ -117,7 +115,9 @@ const Popup = () => {
             onClick={async () => {
                 const { data } = await postArticle({
                     url: currentUrl,
-                    walletAddress: address ? String(address) : null
+                    // walletAddress: address ? String(address) : null,
+                    // Todo: hard-coded for now, pass the iExec NFT later
+                    walletAddress: '0xD9c3169A81c570ECF667d5c685C5C37bbD65b820',
                 });
                 console.log({ data });
                 const article = data?.article;
