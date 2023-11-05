@@ -19,6 +19,7 @@ const Popup = () => {
     const [currentUrl, setCurrentUrl] = useState('');
     const [history, setHistory] = useState();
     const [email, setEmail] = useState('');
+    const [loadingContent, setLoadingContent] = useState(false);
 
     // Get current url on mount
     useEffect(() => {
@@ -111,14 +112,16 @@ const Popup = () => {
         <h1 className="mb-2 prose-lg">Git News</h1>
         <button className="btn btn-sm mb-2" onClick={() => open()}>Open Connect Modal</button>
         <button
-            className={clsx('btn btn-primary', isWriting && 'btn-disabled')}
+            className={clsx('btn btn-primary', isWriting || loadingContent && 'btn-disabled')}
             onClick={async () => {
+                setLoadingContent(true);
                 const { data } = await postArticle({
                     url: currentUrl,
                     // walletAddress: address ? String(address) : null,
                     // Todo: hard-coded for now, pass the iExec NFT later
                     walletAddress: '0xD9c3169A81c570ECF667d5c685C5C37bbD65b820',
                 });
+                setLoadingContent(false);
                 console.log({ data });
                 const article = data?.article;
                 const keys = Object.keys(article.versions);
@@ -136,7 +139,7 @@ const Popup = () => {
             }}
         >
           Contribute Now!
-          {isWriting ? <span className="loading loading-spinner loading-xs"/> : null}
+          {isWriting || loadingContent ? <span className="loading loading-spinner loading-xs"/> : null}
         </button>
       </header>
         {isConnected
